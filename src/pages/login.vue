@@ -1,15 +1,26 @@
 <template>
   <div>
-      <h3>登录部分</h3>
+    <Captcha/>
   </div>
 </template>
 
 <script>
+import Captcha from '../components/captcha.vue'
 export default {
-    name:'login'
-}
+  name: "login",
+  components: {
+    Captcha
+  },
+  data() {
+      return {
+          
+      }
+  },
+  setup(props, conten) {
+
+  },
+};
 </script>
 
 <style>
-
 </style>
