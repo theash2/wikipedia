@@ -14,7 +14,7 @@
               @blur="checkLPhone"
               :class="{hiddenTanchuang: show}"
             /><br />
-            <span class="tishixiaoxi disappear">请输入用户名</span>
+            <span class="tishixiaoxi" >{{usernametip}}</span>
             <input
               type="password"
               placeholder="请输入密码"
@@ -22,7 +22,7 @@
               v-model="LUserPsd"
               @blur="checkLPsd"
             /><br />
-            <span class="tishixiaoxi disappear">请输入密码</span>
+            <span class="tishixiaoxi">{{passwordtip}}</span>
             <input
               type="text"
               placeholder="请输入验证码"
@@ -37,7 +37,7 @@
               v-model="checkCode"
             />
             <br />
-            <span class="tishixiaoxi disappear">请输入验证码。</span>
+            <span class="tishixiaoxi">{{checkCodetip}}</span>
             <a class="user_login" @click="Login">登录</a>
           </div>
         </div>
@@ -49,27 +49,31 @@
 <script>
 import { ref, onUpdated } from "vue";
 import getXLSX from "../services/getXLSX.vue";
+import readFile from '../services/readFile.vue';
 var code; //在全局定义验证码
 export default {
   data() {
     return {
       userPhone: "",
+      usernametip:'',
+      passwordtip:'',
       dialog: false,
       LUserPhone: "",
       LUserPsd: "",
       picLyanzhengma: "",
       checkCode: "",
-      show:false
+      show:false,
+      checkCodetip:''
     };
   },
   components: {
-    getXLSX,
+    getXLSX
   },
   setup(props, conten) {
     const usersData = ref([]);
     const getUsersData = (val) => {
       console.log("子组件传回的值", val);
-      usersData = val;
+      usersData.value = val;
     };
     return {
       usersData,
@@ -78,7 +82,7 @@ export default {
   },
   methods: {
     goto_protocol() {
-      this.$router.push({ path: "/protocol" });
+      // this.$router.push({ path: "/protocol" });
     },
     checkUserPhone() {
       if (this.userPhone == "") {
@@ -93,28 +97,22 @@ export default {
     // 验证登陆用户名
     checkLPhone() {
       if (this.LUserPhone == "") {
-
-        $(".login_content1 span:eq(0)").removeClass("disappear");
-        $(".login_content1 span:eq(0)").text("请输入用户名。");
-      } else {
-        $(".login_content1 span:eq(0)").removeClass("disappear");
-        $(".login_content1 span:eq(0)").text("请输入正确手机号。");
+        this.usernametip = '请输入用户名';
+      }else{
+        this.usernametip = '';
+        return true
       }
     },
     //验证登陆密码格式
     checkLPsd() {
       if (this.LUserPsd == "") {
-        $(".login_content1 span:eq(1)").text("请输入密码");
-        $(".login_content1 span:eq(1)").removeClass("disappear");
+        this.passwordtip = "请输入密码";
       } else if (
-        this.LUserPsd.search(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/) ==
-        0
-      ) {
-        $(".login_content1 span:eq(1)").addClass("disappear");
+        this.LUserPsd.search(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/) == 0) {
+        this.passwordtip='';
         return true;
       } else {
-        $(".login_content1 span:eq(1)").removeClass("disappear");
-        $(".login_content1 span:eq(1)").text("密码必须6-20位，包含字母与数字");
+       this.passwordtip="密码必须6-20位，包含字母与数字";
       }
     },
     // 图片验证码
@@ -133,31 +131,28 @@ export default {
     checkLpicma() {
       this.picLyanzhengma.toUpperCase(); //取得输入的验证码并转化为大写
       if (this.picLyanzhengma == "") {
-        $(".login_content1 span:eq(2)").text("请输入验证码");
-        $(".login_content1 span:eq(2)").removeClass("disappear");
+        this.checkCodetip="请输入验证码";
       } else if (this.picLyanzhengma.toUpperCase() != this.checkCode) {
         //若输入的验证码与产生的验证码不一致时
         console.log(this.picLyanzhengma.toUpperCase());
-        console.log(code);
-        $(".login_content1 span:eq(2)").text("验证码不正确");
-        $(".login_content1 span:eq(2)").removeClass("disappear");
+        this.checkCodetip="请输入验证码";"验证码不正确";
         this.createCode(); //刷新验证码
         this.picLyanzhengma = "";
       } else {
         //输入正确时
-        $(".login_content1 span:eq(2)").addClass("disappear");
-        $(".login_content1 span:eq(2)").text("请输入验证码");
+       this.checkCodetip="";
         return true;
       }
     },
     Login() {
       if (this.checkLPhone() == true &&this.checkLPsd() == true &&this.checkLpicma() == true) {
-          let index = this.usersData.find((user,index)=>{
+          let index = this.usersData.some((user,index)=>{
               if(user.username===this.LUserPhone&&user.password===this.LUserPsd){
-                  this.$router.push('/index');
+                this.$router.push('/index');
+                return true;
               }
           });
-          if(index!=-1){
+          if(index==-1){
               alert('用户名或密码错误,请检查!');
           }
       }
@@ -170,7 +165,7 @@ export default {
 </script>
 
 <style scoped>
-/*@import '/static/css/register_login.css'*/
+/* @import '/static/css/register_login.css'; */
 .left {
   float: left;
 }
@@ -195,7 +190,7 @@ export default {
 }
 /*login和register部分*/
 .login_bac {
-  width: 1180px;
+  /* width: 1180px; */
   height: 728px;
   background-size: 1180px 728px;
   margin: 0 auto;
@@ -316,7 +311,7 @@ export default {
   color: #fff;
   background-color: #a2be3c;
   border-radius: 5px;
-  margin-left: 40px;
+  margin-left: 65px;
   /*margin-top: 30px;*/
   cursor: pointer;
 }
