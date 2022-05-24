@@ -47,9 +47,8 @@
 </template>
 
 <script>
-import { ref, onUpdated } from "vue";
+import { ref } from "vue";
 import getXLSX from "../services/getXLSX.vue";
-import readFile from '../services/readFile.vue';
 var code; //在全局定义验证码
 export default {
   data() {
@@ -148,7 +147,7 @@ export default {
       if (this.checkLPhone() == true &&this.checkLPsd() == true &&this.checkLpicma() == true) {
           let index = this.usersData.some((user,index)=>{
               if(user.username===this.LUserPhone&&user.password===this.LUserPsd){
-                this.$router.push('/index');
+                this.$router.push({path:'/index'});
                 return true;
               }
           });
@@ -157,6 +156,9 @@ export default {
           }
       }
     },
+  },
+  mounted(){
+  console.log('路由:',this.$router);
   },
   created() {
     this.createCode();

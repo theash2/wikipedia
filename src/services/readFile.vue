@@ -1,15 +1,12 @@
 <template>
-  <div>
-      <p>读取文件</p>
     <div>
       <input type="file"  accept="" @change="beforeUpload" />
     </div>
-  </div>
 </template>
 
 
 <script>
-import { ref, toRefs } from "vue";
+import { ref } from "vue";
 function readFile(file) {
   file = file.target.files[0];
 
@@ -35,8 +32,7 @@ export default {
     const beforeUpload = (event) => {
       const workbook = readFile(event)
         .then((val) => {
-          emit("getUsersData", val);
-          console.log("workbook", val);
+          emit("getData", val);
           return false;
         })
         .catch((error) => {
