@@ -2,6 +2,7 @@
 module.exports = {
     //关闭语法检查报错onsave
     lintOnSave:false,
+    publicPath: './',
     //vue-cli配置代理服务器,请求->服务器之间的解决跨域问题
     //方式1
     // devServer:{

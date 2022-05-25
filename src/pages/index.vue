@@ -2,7 +2,7 @@
   <div>
       <readFile @getData="getData"></readFile>
       <h3>内容标题:{{content.title}}</h3>
-      <p>内容:{{content.content}}</p>
+      <p v-for="(c,index) in content.content" :key="index">内容:{{c}}</p>
   </div>
 </template>
 
@@ -19,15 +19,24 @@ export default {
     const Data = ref([]);
     const content = reactive({
       title:'',
-      content:''
+      content:[]
     });
     const getData = (val) => {
       Data.value = val;
-      console.log("子组件传回的值", val);
-      content.content = '内容'
-      // content.title = praseHTML(val);
-      content.title = new DOMParser().parseFromString(val,"text/xml")
-      console.log("转化为dom:",content.title);
+      // console.log("子组件传回的值", val);
+      let html = new DOMParser().parseFromString(val,"text/html");
+      content.title = html.getElementsByTagName('title')[0].innerHTML;
+      let summary = html.getElementsByClassName("lemma-summary")[0];
+      let arrs =Array.from(summary.getElementsByClassName('para'));
+      arrs.forEach((a,index) => {
+        if(a.innerHTML.length>0){
+          // content.content.push(a.innerHTML
+          console.log(index,":",a.innerHTML)
+        }
+        });
+      console.log("title:",content.title);
+      content.content = typeof(val);
+      console.log("转化为dom:",arrs);
 
     };
     return {

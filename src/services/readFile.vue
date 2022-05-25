@@ -12,7 +12,7 @@ function readFile(file) {
 
   return new Promise((resolve, reject) => {
     let reader = new FileReader();
-    reader.readAsText(file,"utf-8");
+    reader.readAsText(file);
     reader.onload = function (evt) {
       let data = evt.target.result; // 读到的数据
       resolve(data);
