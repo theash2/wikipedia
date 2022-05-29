@@ -1,6 +1,5 @@
 <template>
   <div>
-      <readFile @getData="getData"></readFile>
       <h3>内容标题:{{content.title}}</h3>
       <p v-for="(c,index) in content.content" :key="index">内容:{{c}}</p>
   </div>

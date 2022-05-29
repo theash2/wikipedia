@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import Login from './pages/login.vue'
 export default {
   name: 'App',
   components: {

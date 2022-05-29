@@ -1,6 +1,5 @@
 <template>
   <div>
-    <getXLSX @getUsersData="getUsersData"></getXLSX>
     <div class="login_or_register">
       <div class="login_content">
         <div class="login_bac">
@@ -49,6 +48,7 @@
 <script>
 import { ref } from "vue";
 import getXLSX from "../services/getXLSX.vue";
+import { getLoginData } from '../services/apis';
 var code; //在全局定义验证码
 export default {
   data() {
@@ -144,6 +144,12 @@ export default {
       }
     },
     Login() {
+      //发送请求,获取用户数据
+        getLoginData().then((result) => {
+          console.log('用户信息:',result);
+        }).catch((err) => {
+          console.log('获取信息失败:',err);
+        });
       if (this.checkLPhone() == true &&this.checkLPsd() == true &&this.checkLpicma() == true) {
           let index = this.usersData.some((user,index)=>{
               if(user.username===this.LUserPhone&&user.password===this.LUserPsd){

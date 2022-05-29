@@ -11,11 +11,6 @@ export default {
   components: {
     Captcha
   },
-  data() {
-      return {
-          
-      }
-  },
   setup(props, conten) {
 
   },
