@@ -3,7 +3,6 @@
     <div id="searchcontainer">
     <el-input placeholder="请输入内容" v-model="searchInput" @change="print" clearable> </el-input>
     <el-button type="primary" icon="Search">搜索</el-button>
-    <!-- <Search/> -->
     </div>
     <h3>内容标题:{{ content.title }}</h3>
     <p v-for="(c, index) in content.content" :key="index">内容:{{ c }}</p>

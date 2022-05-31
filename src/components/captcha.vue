@@ -11,9 +11,9 @@
               class="register_content_input"
               v-model="LUserPhone"
               @blur="checkLPhone"
-              :class="{hiddenTanchuang: show}"
+              :class="{ hiddenTanchuang: show }"
             /><br />
-            <span class="tishixiaoxi" >{{usernametip}}</span>
+            <span class="tishixiaoxi">{{ usernametip }}</span>
             <input
               type="password"
               placeholder="请输入密码"
@@ -21,7 +21,7 @@
               v-model="LUserPsd"
               @blur="checkLPsd"
             /><br />
-            <span class="tishixiaoxi">{{passwordtip}}</span>
+            <span class="tishixiaoxi">{{ passwordtip }}</span>
             <input
               type="text"
               placeholder="请输入验证码"
@@ -36,7 +36,7 @@
               v-model="checkCode"
             />
             <br />
-            <span class="tishixiaoxi">{{checkCodetip}}</span>
+            <span class="tishixiaoxi">{{ checkCodetip }}</span>
             <a class="user_login" @click="Login">登录</a>
           </div>
         </div>
@@ -48,25 +48,25 @@
 <script>
 import { ref } from "vue";
 import getXLSX from "../services/getXLSX.vue";
-import { getLoginData } from '../services/apis';
+import { LoginTo } from "../services/apis";
 var code; //在全局定义验证码
 export default {
   data() {
     return {
       userPhone: "",
-      usernametip:'',
-      passwordtip:'',
+      usernametip: "",
+      passwordtip: "",
       dialog: false,
       LUserPhone: "",
       LUserPsd: "",
       picLyanzhengma: "",
       checkCode: "",
-      show:false,
-      checkCodetip:''
+      show: false,
+      checkCodetip: "",
     };
   },
   components: {
-    getXLSX
+    getXLSX,
   },
   setup(props, conten) {
     const usersData = ref([]);
@@ -96,10 +96,10 @@ export default {
     // 验证登陆用户名
     checkLPhone() {
       if (this.LUserPhone == "") {
-        this.usernametip = '请输入用户名';
-      }else{
-        this.usernametip = '';
-        return true
+        this.usernametip = "请输入用户名";
+      } else {
+        this.usernametip = "";
+        return true;
       }
     },
     //验证登陆密码格式
@@ -107,18 +107,53 @@ export default {
       if (this.LUserPsd == "") {
         this.passwordtip = "请输入密码";
       } else if (
-        this.LUserPsd.search(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/) == 0) {
-        this.passwordtip='';
+        this.LUserPsd.search(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/) ==
+        0
+      ) {
+        this.passwordtip = "";
         return true;
       } else {
-       this.passwordtip="密码必须6-20位，包含字母与数字";
+        this.passwordtip = "密码必须6-20位，包含字母与数字";
       }
     },
     // 图片验证码
     createCode() {
       code = "";
       var codeLength = 4; //验证码的长度
-      var random = new Array(0,1,2,3,4,5,6,7,8,9,"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"); //随机数
+      var random = new Array(
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z"
+      ); //随机数
       for (var i = 0; i < codeLength; i++) {
         //循环操作
         var index = Math.floor(Math.random() * 36); //取得随机数的索引（0~35）
@@ -130,41 +165,43 @@ export default {
     checkLpicma() {
       this.picLyanzhengma.toUpperCase(); //取得输入的验证码并转化为大写
       if (this.picLyanzhengma == "") {
-        this.checkCodetip="请输入验证码";
+        this.checkCodetip = "请输入验证码";
       } else if (this.picLyanzhengma.toUpperCase() != this.checkCode) {
         //若输入的验证码与产生的验证码不一致时
         console.log(this.picLyanzhengma.toUpperCase());
-        this.checkCodetip="请输入验证码";"验证码不正确";
+        this.checkCodetip = "请输入验证码";
+        ("验证码不正确");
         this.createCode(); //刷新验证码
         this.picLyanzhengma = "";
       } else {
         //输入正确时
-       this.checkCodetip="";
+        this.checkCodetip = "";
         return true;
       }
     },
     Login() {
-      //发送请求,获取用户数据
-        getLoginData().then((result) => {
-          console.log('用户信息:',result);
-        }).catch((err) => {
-          console.log('获取信息失败:',err);
-        });
-      if (this.checkLPhone() == true &&this.checkLPsd() == true &&this.checkLpicma() == true) {
-          let index = this.usersData.some((user,index)=>{
-              if(user.username===this.LUserPhone&&user.password===this.LUserPsd){
-                this.$router.push({path:'/index'});
-                return true;
-              }
+      if (
+        this.checkLPhone() == true &&
+        this.checkLPsd() == true &&
+        this.checkLpicma() == true
+      ) {
+        LoginTo()
+          .then((result) => {
+            console.log("LoginTo result", result);
+            if (result['login']) {
+              this.$router.push({ path: "/index" });
+            }else if(result['login']==false){
+              alert("用戶不存在,请进行注册")
+            }
+            else{
+                 alert("用户名或密码错误,请检查!");
+            }
+          })
+          .catch((err) => {
+            console.log("LoginTo error", err);
           });
-          if(index==-1){
-              alert('用户名或密码错误,请检查!');
-          }
       }
     },
-  },
-  mounted(){
-  console.log('路由:',this.$router);
   },
   created() {
     this.createCode();
