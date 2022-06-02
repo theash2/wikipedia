@@ -4,7 +4,8 @@
       <div class="login_content">
         <div class="login_bac">
           <div class="login_content1">
-            <p>登录</p>
+            <p v-show="isLogin" >登录</p>
+            <p v-show="isRegister" >注册</p>
             <input
               type="text"
               placeholder="请输入用户名"
@@ -38,6 +39,7 @@
             <br />
             <span class="tishixiaoxi">{{ checkCodetip }}</span>
             <a class="user_login" @click="Login">登录</a>
+            <el-link type="primary" class="ToRegister" @click="Register">注册</el-link>
           </div>
         </div>
       </div>
@@ -47,8 +49,8 @@
 
 <script>
 import { ref } from "vue";
-import getXLSX from "../services/getXLSX.vue";
 import { LoginTo } from "../services/apis";
+import { ElMessage } from 'element-plus';
 var code; //在全局定义验证码
 export default {
   data() {
@@ -63,10 +65,11 @@ export default {
       checkCode: "",
       show: false,
       checkCodetip: "",
+      isLogin:true,
+      isRegister:false
     };
   },
   components: {
-    getXLSX,
   },
   setup(props, conten) {
     const usersData = ref([]);
@@ -80,15 +83,6 @@ export default {
     };
   },
   methods: {
-    goto_protocol() {
-      // this.$router.push({ path: "/protocol" });
-    },
-    checkUserPhone() {
-      if (this.userPhone == "") {
-        console.log(111);
-        $(".hiddenTanchuang").removeClass("hiddenTanchuang");
-      }
-    },
     hiddenTanchuang() {
       $(".tanchuang").addClass("hiddenTanchuang");
     },
@@ -156,7 +150,7 @@ export default {
       ); //随机数
       for (var i = 0; i < codeLength; i++) {
         //循环操作
-        var index = Math.floor(Math.random() * 36); //取得随机数的索引（0~35）
+        var index = Math.floor(Math.random() * 32); //取得随机数的索引（0~35）
         code += random[index]; //根据索引取得随机数加到code上
       }
       this.checkCode = code; //把code值赋给验证码
@@ -189,6 +183,7 @@ export default {
           .then((result) => {
             console.log("LoginTo result", result);
             if (result['login']) {
+              ElMessage.success("登录成功,转入首页");
               this.$router.push({ path: "/index" });
             }else if(result['login']==false){
               alert("用戶不存在,请进行注册")
@@ -201,6 +196,9 @@ export default {
             console.log("LoginTo error", err);
           });
       }
+    },
+    Register(){
+      this.$router.push('./register')
     },
   },
   created() {

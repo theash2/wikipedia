@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import 'element-plus/dist/index.css'
+import 'element-plus/dist/index.css';
 import {
   ElButton,
   ElCheckbox,
@@ -9,7 +9,8 @@ import {
   ElLink,
   ElRadio,
   ElTabPane,
-  ElTabs
+  ElTabs,
+  ElMessage
 } from 'element-plus/lib/components';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const components = [
@@ -21,7 +22,8 @@ const components = [
   ElTabs,
   ElTabPane,
   ElCheckbox,
-  ElLink
+  ElLink,
+  ElMessage
 ]
 
 export default function (app){
@@ -30,5 +32,5 @@ export default function (app){
   };
   for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
-}
+  }
 }

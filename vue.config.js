@@ -1,3 +1,6 @@
+const AutoImport = require('unplugin-auto-import/webpack')
+const Components = require('unplugin-vue-components/webpack')
+const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 //配置vue可选的项目,会与后端node的配置文件比对,更新配置. 删除该文件就默认配置
 module.exports = {
     //关闭语法检查报错onsave
@@ -26,5 +29,5 @@ module.exports = {
             }
           }
         }
-      
+
 }
