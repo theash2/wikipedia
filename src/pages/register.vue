@@ -42,7 +42,7 @@ export default {
     register() {
       if (this.checkUser() && this.checkPwd()) {
         console.log(this.username, this.password);
-        Register()
+        Register({username:this.username,password:this.password})
           .then((result) => {
             if (result) {
               this.RegisterToIndexDialog();

@@ -1,11 +1,15 @@
 <template>
   <div>
     <div id="searchcontainer">
-    <el-input placeholder="请输入内容" v-model="searchInput" @change="print" clearable> </el-input>
-    <el-button type="primary" icon="Search">搜索</el-button>
+      <el-input placeholder="请输入内容" v-model="searchInput" @change="print" clearable class="usernameInput"> </el-input>
+      <el-button type="primary" icon="Search" @click="searchContent">搜索</el-button>
     </div>
-    <h3>内容标题:{{ content.title }}</h3>
-    <p v-for="(c, index) in content.content" :key="index">内容:{{ c }}</p>
+    <p class="info">标题:{{ contents.title }}</p>
+    <p class="info">简介:</p>
+    <ol class="content">
+
+      <li v-for="(c, index) in contents.content" :key="index">{{ c }}</li>
+    </ol>
   </div>
 </template>
 
@@ -13,6 +17,7 @@
 import { ref, reactive } from "vue";
 import readFile from "../services/readFile.vue";
 import { Search } from '@element-plus/icons-vue'
+import { SearchData } from '../services/apis';
 export default {
   name: "index",
   components: {
@@ -21,45 +26,73 @@ export default {
   },
   data() {
     return {
-      searchInput:''
+      searchInput:'',
+      bodyContent:''
     }
   },
   methods: {
     print(){
-      console.log(this.searchInput)
+      console.log('print',this.searchInput)
+    },
+    searchContent(){
+      SearchData({key:this.searchInput}).then((result) => {
+        if(result){
+            this.getContent(result);
+        }else{
+          alert('该词条暂未收录');
+        }
+      }).catch((err) => {
+        
+      });
+    },
+    getContent(string){
+      let html = new DOMParser().parseFromString(string,"text/html");
+      console.log('getContent',html);
+      this.contents.title = html.getElementsByTagName('title')[0].innerHTML.replace("百度百科","");
+      let summary = html.getElementsByClassName("lemma-summary")[0];
+      let arrs =Array.from(summary.getElementsByClassName('para'));
+      arrs.forEach((a,index) => {
+        if(a.innerHTML.length>0){
+          console.log(index,":",a.textContent)
+          this.contents.content.push(a.textContent);
+        }
+        });
+      console.log("title:",content.title);
+      this.content[0].content = typeof(string);
+      console.log("转化为dom:",arrs);
+      
+    },
+    formatString(string){
     }
   },
-  setup(props, contents) {
+  setup(props, contentsparams) {
     const Data = ref([]);
-    const content = reactive({
+    const contents = reactive({
       title: "",
       content: [],
     });
-    const getData = (val) => {
-      Data.value = val;
-      // console.log("子组件传回的值", val);
-      let html = new DOMParser().parseFromString(val, "text/html");
-      content.title = html.getElementsByTagName("title")[0].innerHTML;
-      let summary = html.getElementsByClassName("lemma-summary")[0];
-      let arrs = Array.from(summary.getElementsByClassName("para"));
-      arrs.forEach((a, index) => {
-        if (a.innerHTML.length > 0) {
-          // content.content.push(a.innerHTML
-          console.log(index, ":", a.innerHTML);
-        }
-      });
-      console.log("title:", content.title);
-      content.content = typeof val;
-      console.log("转化为dom:", arrs);
-    };
     return {
       Data,
-      getData,
-      content,
+      contents,
     };
   },
 };
 </script>
 
 <style>
+.searchcontainer{
+  width: 300px;
+  height: auto;
+}
+.usernameInput{
+  width: 50%;
+}
+.content{
+  width: 80%;
+  margin: 0px auto;
+}
+.info{
+  text-align: left;
+  margin-left: 20%;
+}
 </style>

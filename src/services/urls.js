@@ -1,1 +1,1 @@
-export var LOGIN = '/';
+export var LOGIN = '127.0.0.1:8080/';

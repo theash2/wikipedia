@@ -5,7 +5,6 @@
         <div class="login_bac">
           <div class="login_content1">
             <p v-show="isLogin" >登录</p>
-            <p v-show="isRegister" >注册</p>
             <input
               type="text"
               placeholder="请输入用户名"
@@ -179,7 +178,7 @@ export default {
         this.checkLPsd() == true &&
         this.checkLpicma() == true
       ) {
-        LoginTo()
+        LoginTo({username:this.LUserPhone,password:this.LUserPsd})
           .then((result) => {
             console.log("LoginTo result", result);
             if (result['login']) {
@@ -208,7 +207,6 @@ export default {
 </script>
 
 <style scoped>
-/* @import '/static/css/register_login.css'; */
 .left {
   float: left;
 }

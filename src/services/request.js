@@ -4,7 +4,7 @@ import { LOGIN } from './urls';
 export function request(config) {
   // 创建axios的实例
   const instance = axios.create({
-    baseURL: LOGIN,
+    baseURL: 'http://localhost:8080/',
     timeout: 10000
   })
   // 请求拦截器配置
@@ -22,7 +22,7 @@ export function request(config) {
   }, error => {
     switch (error.response.status) {
       case 404:
-        console.log("为成功访问道服务器")
+        console.log("未成功连接服务器")
         router.push({path: '/404'})
         break
       default:
