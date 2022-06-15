@@ -10,7 +10,8 @@ import {
   ElRadio,
   ElTabPane,
   ElTabs,
-  ElMessage
+  ElMessage,
+  ElContainer
 } from 'element-plus/lib/components';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const components = [
@@ -23,7 +24,8 @@ const components = [
   ElTabPane,
   ElCheckbox,
   ElLink,
-  ElMessage
+  ElMessage,
+  ElContainer
 ]
 
 export default function (app){

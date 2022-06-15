@@ -178,10 +178,11 @@ export default {
         this.checkLPsd() == true &&
         this.checkLpicma() == true
       ) {
-        LoginTo({username:this.LUserPhone,password:this.LUserPsd})
+        LoginTo({username:this.LUserPhone,password:this.LUserPsd} )
           .then((result) => {
             console.log("LoginTo result", result);
-            if (result['login']) {
+            //result[text]
+            if (result) {
               ElMessage.success("登录成功,转入首页");
               this.$router.push({ path: "/index" });
             }else if(result['login']==false){

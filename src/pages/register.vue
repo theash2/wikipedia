@@ -44,7 +44,8 @@ export default {
         console.log(this.username, this.password);
         Register({username:this.username,password:this.password})
           .then((result) => {
-            if (result) {
+            if (result==true) {
+              
               this.RegisterToIndexDialog();
               this.$router.push("./index");
             }

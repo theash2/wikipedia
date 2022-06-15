@@ -4,7 +4,7 @@ import { LOGIN } from './urls';
 export function request(config) {
   // 创建axios的实例
   const instance = axios.create({
-    baseURL: 'http://localhost:8080/',
+    baseURL: 'http://127.0.0.1:8084/WikiServe',
     timeout: 10000
   })
   // 请求拦截器配置
